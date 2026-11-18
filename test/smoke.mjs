@@ -101,6 +101,14 @@ check("an unknown project is empty, not an error", () => {
   eq(recent("/nowhere/at/all").length, 0, "should be empty");
 });
 
+check("invented types are normalised to note", () => {
+  // Observed in the wild: the model returned "gotcha", outside the documented set.
+  eq(remember({ cwd: P, text: "x", type: "gotcha" }).type, "note", "invented");
+  eq(remember({ cwd: P, text: "x", type: "FIX" }).type, "fix", "case");
+  eq(remember({ cwd: P, text: "x" }).type, "note", "default");
+  eq(remember({ cwd: P, text: "x", type: "decision" }).type, "decision", "valid");
+});
+
 console.log("summarise");
 
 check("parseRecords reads a bare array", () => {
