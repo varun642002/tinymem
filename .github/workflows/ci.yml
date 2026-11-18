@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    name: Syntax and manifests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: [18, 20, 22]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Check every script parses
+        shell: bash
+        run: |
+          for f in lib/*.mjs hooks/*.mjs; do
+            node --check "$f"
+            echo "ok $f"
+          done
+
+      - name: Check every manifest is valid JSON
+        shell: bash
+        run: |
+          for f in .claude-plugin/plugin.json .claude-plugin/marketplace.json hooks/hooks.json package.json; do
+            node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))"
+            echo "ok $f"
+          done
+
+      - name: Store round-trips a memory
+        shell: bash
+        env:
+          TINYMEM_HOME: ${{ runner.temp }}/tinymem-ci
+        run: node test/smoke.mjs
+
+      - name: SessionStart hook survives garbage input
+        shell: bash
+        env:
+          TINYMEM_HOME: ${{ runner.temp }}/tinymem-ci
+        run: echo 'not json' | node hooks/session-start.mjs

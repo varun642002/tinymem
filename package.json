@@ -1,0 +1,32 @@
+{
+  "name": "tinymem",
+  "version": "1.0.0",
+  "description": "Tiny persistent memory for Claude Code. Recalls what you did in a project at session start, captures it again at session end. No dependencies, no server, plain JSONL on disk.",
+  "type": "module",
+  "license": "MIT",
+  "author": "varun642002",
+  "homepage": "https://github.com/varun642002/tinymem",
+  "repository": { "type": "git", "url": "https://github.com/varun642002/tinymem.git" },
+  "bugs": { "url": "https://github.com/varun642002/tinymem/issues" },
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "test": "node test/smoke.mjs",
+    "import": "node lib/import.mjs",
+    "import:dry": "node lib/import.mjs --dry-run",
+    "memories": "node lib/cli.mjs list",
+    "projects": "node lib/cli.mjs projects"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "memory",
+    "plugin",
+    "hooks",
+    "context",
+    "recall",
+    "ai",
+    "llm"
+  ],
+  "files": ["lib", "hooks", "commands", ".claude-plugin", "README.md", "LICENSE"],
+  "dependencies": {}
+}
