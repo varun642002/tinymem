@@ -1,0 +1,15 @@
+{
+  "name": "tinymem",
+  "description": "Tiny persistent memory for Claude Code",
+  "owner": { "name": "varun642002" },
+  "plugins": [
+    {
+      "name": "tinymem",
+      "description": "Tiny persistent memory for Claude Code. Recalls what you did in a project at session start, captures it again at session end. No dependencies, no server, plain JSONL on disk.",
+      "version": "1.0.0",
+      "source": "./",
+      "license": "MIT",
+      "keywords": ["memory", "hooks", "context", "recall", "claude-code"]
+    }
+  ]
+}
