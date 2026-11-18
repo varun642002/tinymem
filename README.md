@@ -135,6 +135,7 @@ existing memories go into that prompt, so it won't store the same thing twice.
 | `preference` | How you want to be worked with | *User runs logins; assistant never handles credentials* |
 | `fact` | A non-obvious constraint | *Build is esbuild; the webpack config is dead* |
 | `state` | Where ongoing work stands | *Deploys hang in UNKNOWN; DATABASE_URL unset* |
+| `note` | The fallback for anything else | Also used when a record arrives with an unknown type |
 
 It is told **not** to record file-by-file narration, anything obvious from the
 code or git history, routine tool output, or secrets.
