@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🧠 tinymem
+# tinymem
 
 ### Tiny persistent memory for Claude Code
 
@@ -18,14 +18,14 @@
 
 ---
 
-## 😤 The problem
+## The problem
 
 You spend an hour teaching Claude your project. The build quirk. The thing that
 looks like a bug but isn't. That you run the deploys yourself.
 
 Then you close the session, and all of it is gone.
 
-## ✨ The fix
+## The fix
 
 tinymem writes that knowledge down and hands it back the next time you open the
 project:
@@ -41,14 +41,14 @@ project:
 
 That block is injected at the top of every new session in that project.
 
-🔒 **No server. No database. No account. Nothing phones home.** Your memories are
+**No server. No database. No account. Nothing phones home.** Your memories are
 plain JSONL files on your own disk, in `~/.tinymem/`.
 
 ---
 
-## 🚀 Install
+## Install
 
-> **Requires** [Claude Code](https://claude.com/claude-code) and Node 18+.
+Free and open source. Requires [Claude Code](https://claude.com/claude-code) and Node 18+.
 
 ```bash
 claude plugin marketplace add varun642002/tinymem
@@ -58,10 +58,10 @@ claude plugin marketplace add varun642002/tinymem
 claude plugin install tinymem@tinymem
 ```
 
-Open a new session. That's it. 🎉
+Open a new session. That's it.
 
 <details>
-<summary>📦 Other ways to install</summary>
+<summary>Other ways to install</summary>
 
 **Try it for one session, no install:**
 
@@ -99,34 +99,34 @@ Your memories survive uninstall — delete `~/.tinymem/` if you want them gone t
 
 ---
 
-## ⚙️ How it works
+## How it works
 
 Memory is three moving parts. That really is the whole idea:
 
 ```mermaid
 flowchart LR
-    A[🟢 Session starts] -->|SessionStart hook| B[📖 Read ~/.tinymem]
-    B --> C[💉 Inject memories<br/>into context]
-    C --> D[💬 You work]
-    D -->|Stop hook| E[🤖 Summarise transcript<br/>with claude -p]
-    E --> F[💾 Append new memories]
+    A[Session starts] -->|SessionStart hook| B[Read ~/.tinymem]
+    B --> C[Inject memories<br/>into context]
+    C --> D[You work]
+    D -->|Stop hook| E[Summarise transcript<br/>with claude -p]
+    E --> F[Append new memories]
     F -.->|next session| B
 ```
 
-| | Part | File | What it does |
-|---|---|---|---|
-| 💾 | **Store** | `lib/store.mjs` | One JSONL file per project under `~/.tinymem/` |
-| 📖 | **Recall** | `hooks/session-start.mjs` | `SessionStart` hook injects past memories |
-| 🤖 | **Capture** | `hooks/stop-capture.mjs` | `Stop` hook summarises the finished session |
-| 📥 | **Import** | `lib/import.mjs` | Backfills from transcripts you already have |
+| Part | File | What it does |
+|---|---|---|
+| **Store** | `lib/store.mjs` | One JSONL file per project under `~/.tinymem/` |
+| **Recall** | `hooks/session-start.mjs` | `SessionStart` hook injects past memories |
+| **Capture** | `hooks/stop-capture.mjs` | `Stop` hook summarises the finished session |
+| **Import** | `lib/import.mjs` | Backfills from transcripts you already have |
 
 A hook can't think, so capture shells out to `claude -p` with a cheap model,
 hands it the transcript, and asks for 0–5 durable facts as JSON. Titles of
 existing memories go into that prompt, so it won't store the same thing twice.
 
-💰 **Cost:** roughly a cent per session on Haiku.
+**Cost:** roughly a cent per session on Haiku.
 
-### 🏷️ What gets remembered
+### What gets remembered
 
 | Type | Meaning | Example |
 |---|---|---|
@@ -141,16 +141,16 @@ code or git history, routine tool output, or secrets.
 
 ---
 
-## 🎮 Commands
+## Commands
 
 | Command | What it does |
 |---|---|
-| 💾 `/remember <thing>` | Save a memory now. Leave blank and Claude picks from the conversation. |
-| 🔍 `/recall <terms>` | Search this project's memory. |
-| 📥 `/memory-import` | Backfill from sessions you already had. |
+| `/remember <thing>` | Save a memory now. Leave blank and Claude picks from the conversation. |
+| `/recall <terms>` | Search this project's memory. |
+| `/memory-import` | Backfill from sessions you already had. |
 
 <details>
-<summary>⌨️ Using the CLI directly</summary>
+<summary>Using the CLI directly</summary>
 
 ```bash
 node lib/cli.mjs list              # most recent memories here
@@ -180,7 +180,7 @@ node lib/cli.mjs where             # path to this project's store file
 
 ---
 
-## 📥 Import your history
+## Import your history
 
 Already used Claude Code for months? Don't start from nothing.
 
@@ -202,16 +202,15 @@ Or narrow it down:
 node lib/import.mjs --project my-app --limit 5
 ```
 
-✅ **Resumable** — sessions already imported are skipped, so stop and re-run freely.
-✅ **Memory-safe** — transcripts are streamed line by line. A 240 MB session file
-costs no more RAM than a small one.
-✅ **Fast** — 1.1 GB across 26 sessions scanned in about 7 seconds.
+- **Resumable** — sessions already imported are skipped, so stop and re-run freely.
+- **Memory-safe** — transcripts are streamed line by line. A 240 MB session file costs no more RAM than a small one.
+- **Fast** — 1.1 GB across 26 sessions scanned in about 7 seconds.
 
 It skips subagent and workflow transcripts, keeping only real conversations.
 
 ---
 
-## 🔧 Configuration
+## Configuration
 
 All optional, all environment variables:
 
@@ -226,10 +225,10 @@ All optional, all environment variables:
 
 ---
 
-## 🛟 Troubleshooting
+## Troubleshooting
 
 <details>
-<summary>❓ No memory block appears at session start</summary>
+<summary>No memory block appears at session start</summary>
 
 Memories are per project, and a brand new project has none until its first
 session ends. Check whether anything is stored:
@@ -244,7 +243,7 @@ have them. Open a new one.
 </details>
 
 <details>
-<summary>❓ Nothing is being captured</summary>
+<summary>Nothing is being captured</summary>
 
 Run with debugging on to see what the summariser actually said:
 
@@ -259,7 +258,7 @@ already known.
 </details>
 
 <details>
-<summary>❓ It stored something wrong</summary>
+<summary>It stored something wrong</summary>
 
 ```bash
 node lib/cli.mjs list      # find the id
@@ -274,7 +273,7 @@ The store is plain JSONL — editing it in a text editor is entirely fine.
 </details>
 
 <details>
-<summary>❓ I don't want it summarising a sensitive project</summary>
+<summary>I don't want it summarising a sensitive project</summary>
 
 ```bash
 TINYMEM_AUTOCAPTURE=0 claude
@@ -287,7 +286,7 @@ to make it permanent.
 
 ---
 
-## ⚠️ Things worth knowing
+## Things worth knowing
 
 > [!IMPORTANT]
 > **Memories are data, not instructions.** The injected block says so explicitly,
@@ -310,44 +309,43 @@ runs with `TINYMEM_CHILD=1`, and `stop_hook_active` is honoured.
 
 ---
 
-## 🧭 Notes for anyone forking this
+## Notes for anyone forking this
 
 Four things cost real debugging time, in case you hit them too:
 
-| 🐛 | Trap | Why it bites |
-|---|---|---|
-| 1 | **Windows path spellings** | `C:\Foo` and `c:/foo/` must hash to the same project, or the hook and the CLI silently write to different files. |
-| 2 | **Node won't spawn `.cmd`** | On Windows the `claude` call must go through the shell as one command string. Passing an args array with `shell: true` is deprecated. |
-| 3 | **`--bare` can't use OAuth** | It's the right flag for a cheap child run, but authenticates *only* via `ANTHROPIC_API_KEY`. On a subscription login it fails outright, so tinymem adds it only when that key exists. |
-| 4 | **Transcript folder names lie** | Sessions get relocated, so the real working directory must be read from the `cwd` field inside the entries, not the directory name. |
+| Trap | Why it bites |
+|---|---|
+| **Windows path spellings** | `C:\Foo` and `c:/foo/` must hash to the same project, or the hook and the CLI silently write to different files. |
+| **Node won't spawn `.cmd`** | On Windows the `claude` call must go through the shell as one command string. Passing an args array with `shell: true` is deprecated. |
+| **`--bare` can't use OAuth** | It's the right flag for a cheap child run, but authenticates *only* via `ANTHROPIC_API_KEY`. On a subscription login it fails outright, so tinymem adds it only when that key exists. |
+| **Transcript folder names lie** | Sessions get relocated, so the real working directory must be read from the `cwd` field inside the entries, not the directory name. |
 
 ---
 
-## 🗺️ Roadmap
+## Roadmap
 
 Ideas worth building, roughly in order of value. PRs very welcome:
 
-- [ ] 🔎 **Better search** — embeddings (`@xenova/transformers` runs locally) or SQLite FTS5
-- [ ] 🍂 **Decay and merge** — re-summarise periodically, drop what's contradicted
-- [ ] 🌍 **Global vs project scope** — your preferences follow you; project facts don't
-- [ ] 🔌 **An MCP server** — so Claude can query memory mid-session, not just at the top
-- [ ] ✂️ **A `PreCompact` hook** — capture before compaction so long sessions don't lose their middle
-- [ ] 📊 **`/memory-stats`** — what's stored, where, and how stale
-- [ ] 🧪 **A real test suite** — currently verified by hand
+- [ ] **Better search** — embeddings (`@xenova/transformers` runs locally) or SQLite FTS5
+- [ ] **Decay and merge** — re-summarise periodically, drop what's contradicted
+- [ ] **Global vs project scope** — your preferences follow you; project facts don't
+- [ ] **An MCP server** — so Claude can query memory mid-session, not just at the top
+- [ ] **A `PreCompact` hook** — capture before compaction so long sessions don't lose their middle
+- [ ] **`/memory-stats`** — what's stored, where, and how stale
+- [ ] **A real test suite** — currently verified by hand
 
 ---
 
-## 🤝 Contributing
+## Related
+
+[lean-workflow](https://github.com/varun642002/lean-workflow) — token-lean agents and
+workflow skills for Claude Code, by the same author.
+
+## Contributing
 
 Issues and pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 The codebase is deliberately small and dependency-free; please keep it that way.
 
-## 📄 License
+## License
 
-[MIT](LICENSE) — do whatever you like with it.
-
-<div align="center">
-
-**If this saved you from explaining your project to Claude for the fifth time, ⭐ it.**
-
-</div>
+[MIT](LICENSE) — free to use, modify and redistribute, for any purpose, commercial included.
